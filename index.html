@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأحول شات - Hamdy Al-Absi</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/295/295128.png" type="image/png">
+    <style>
+        /* ====== CSS - تصميم فخم ====== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #2b2b3b, #3a3a4d);
+            color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: #1c1c28;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            color: #ffa500;
+            text-shadow: 0 0 15px #ffa500, 0 0 30px #ff4500;
+        }
+
+        .sub-logo {
+            font-size: 1.5em;
+            color: #ff6347;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #ff6347;
+        }
+
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            border: 3px solid #ffa500;
+            border-radius: 15px;
+            padding: 10px;
+            background: #121212;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .input-area input, .input-area button {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .input-area input {
+            flex: 1;
+            background: #2b2b2b;
+            color: #ffa500;
+            box-shadow: 0 3px 10px #ffa500;
+        }
+
+        .input-area button {
+            background: #ffa500;
+            color: #121212;
+            cursor: pointer;
+            box-shadow: 0 3px 15px #ffa500;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .message.me {
+            background: #ffa500;
+            color: #000;
+            text-align: right;
+        }
+
+        .message.other {
+            background: #444;
+            color: #ffa500;
+            text-align: left;
+        }
+
+        .message img {
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ffa500;
+        }
+
+        .message .time {
+            text-align: right;
+            color: #000;
+            font-size: 20px;
+            margin-top: 10px;
+            background: #ffa500;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .menu-icon {
+            font-size: 2em;
+            cursor: pointer;
+            color: #ffa500;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: #2b2b3b;
+            border: 2px solid #ffa500;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .menu button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background: #ffa500;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .menu button:hover {
+            background: #ff4500;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="login-container">
+    <h1 class="sub-logo">HAMDY AL-ABSI</h1>
+    <h1 class="logo">الأحول شات</h1>
+    <h2>تسجيل الدخول</h2>
+    <input type="text" id="username" placeholder="أدخل اسم المستخدم">
+    <input type="password" id="password" placeholder="أدخل كلمة المرور">
+    <button onclick="login()">دخول</button>
+</div>
+
+<div class="container" id="chat-container" style="display: none;">
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <div class="menu" id="menu">
+        <input type="file" id="image-input" accept="image/*">
+        <button onclick="sendImage()">إرسال صورة</button>
+    </div>
+
+    <h1 class="sub-logo">HAMDY AL-ABSI</h1>
+    <h1 class="logo">الأحول شات</h1>
+    
+    <div class="chat-box" id="chat-box"></div>
+
+    <div class="input-area">
+        <input type="text" id="message-input" placeholder="اكتب رسالتك...">
+        <button onclick="sendMessage()">إرسال</button>
+    </div>
+</div>
+
+<audio id="send-sound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+
+<script>
+    let currentUser = "";
+
+    function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        if (password === "771905728" && username.trim() !== "") {
+            currentUser = username;
+            document.getElementById("login-container").style.display = "none";
+            document.getElementById("chat-container").style.display = "block";
+        } else {
+            alert("اسم المستخدم أو كلمة المرور غير صحيحة!");
+        }
+    }
+
+    function toggleMenu() {
+        const menu = document.getElementById("menu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    function sendMessage() {
+        const messageInput = document.getElementById("message-input");
+        const chatBox = document.getElementById("chat-box");
+        const message = messageInput.value.trim();
+
+        if (message === "") return;
+
+        const now = new Date();
+        const time = now.toLocaleTimeString("ar-EG", { hour: '2-digit', minute: '2-digit' });
+
+        chatBox.innerHTML += `
+            <div class="message me">
+                <span>${currentUser}:</span> ${message}
+                <div class="time">🕒 ${time}</div>
+            </div>
+        `;
+
+        document.getElementById("send-sound").play();
+        messageInput.value = "";
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function sendImage() {
+        const input = document.getElementById("image-input");
+        if (input.files.length === 0) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            sendMessage(`<img src="${e.target.result}" alt="صورة مرسلة">`);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+</script>
+
+</body>
+</html>
